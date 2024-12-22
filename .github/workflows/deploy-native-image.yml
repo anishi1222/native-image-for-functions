@@ -28,7 +28,7 @@ jobs:
 
     - name: Build
       run: |
-        mvn all -Pnative
+        mvn clean install -Pnative
         cd ./target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}
         zip -r -0 ../${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip .
 
