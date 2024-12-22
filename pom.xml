@@ -232,7 +232,7 @@
                             <mainClass>${exec.mainClass}</mainClass>
                             <buildArgs combine.children="append">
                                 <buildArg>--no-fallback</buildArg>
-                                <!-- <buildArg>-Ob</buildArg> -->
+                                <buildArg>-Ob</buildArg>
                                 <!-- <buildArg>- -static</buildArg> -->
                                 <!-- <buildArg>- -libc=musl</buildArg> -->
                                 <buildArg>--gc=G1</buildArg>
