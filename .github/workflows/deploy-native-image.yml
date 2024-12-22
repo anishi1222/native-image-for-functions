@@ -3,28 +3,47 @@
 name: Build Native Image and deploy it to Azure Functions
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
-        # Default value if no value is explicitly provided
-        default: 'World'
-        # Input has to be provided for the workflow to run
-        required: true
-        # The data type of the input
-        type: string
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "greet"
-  greet:
-    # The type of runner that the job will run on
+  build-and-deploy:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Runs a single command using the runners shell
-    - name: Send greeting
-      run: echo "Hello ${{ inputs.name }}"
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Setup GraalVM
+      uses: graalvm/setup-graalvm@v1
+      with:
+        java-version: '21'      # See 'Options' for more details
+        distribution: 'graalvm' # See 'Supported distributions' for available options
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Version check
+      run: |
+        echo "GRAALVM_HOME: $GRAALVM_HOME"
+        echo "JAVA_HOME: $JAVA_HOME"
+        java --version
+        native-image --version
+
+    - name: Build Native Image
+      run: mvn -Pnative package
+
+    - name: login Azure
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: packaging
+      run: |
+        echo `pwd` #./build.sh
+    # - name: 'Deploy to Azure Function'
+    #   uses: Azure/functions-action@v1
+    #   with:
+    #     app-name: ${{ secrets.AZ_FUNCTION_NAME_APP }}
+    #     package: target/native_spring_function.zip
