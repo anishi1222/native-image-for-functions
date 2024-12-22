@@ -35,9 +35,10 @@ jobs:
 
     - name: packaging
       id: packaging
+      if: steps.build.outcome == 'success'
       run: |
         pwd
-        cd target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}
+        cd ./target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}
         zip -r -0 ../${{ secrets.AZURE_FUNCTIONS_APP_NAME }}-0.1.zip .
         
     # - name: 'Deploy to Azure Function'
@@ -51,7 +52,7 @@ jobs:
       if: steps.packaging.outcome == 'success'
       with:
         name: my-artifact
-        path: target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip
+        path: ./target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip
       
   deploy:
     runs-on: ubuntu-latest
