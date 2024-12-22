@@ -25,11 +25,13 @@ jobs:
         java-version: '21'
         distribution: 'graalvm'
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          mvn -Pnative package
-          ls -lR
-          cd ./target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}
-          zip -r -0 ../${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip .
+
+    - name: Build
+      run: |
+        mvn -Pnative package
+        ls -lR
+        cd ./target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}
+        zip -r -0 ../${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip .
 
     - name: push artifact
       uses: actions/upload-artifact@v4
