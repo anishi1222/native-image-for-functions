@@ -4,6 +4,10 @@
     "id": "Microsoft.Azure.Functions.ExtensionBundle",
     "version": "[4.*, 5.0.0)"
   },
+  "concurrency": {
+    "dynamicConcurrencyEnabled": true,
+    "snapshotPersistenceEnabled": true
+  },
   "customHandler": {
     "description": {
       "defaultExecutablePath": "demofunc",
@@ -12,5 +16,5 @@
     },
     "enableForwardingHttpRequest": true
   },
-  "functionTimeout" : "00:02:00"
+  "functionTimeout": "00:02:00"
 }
