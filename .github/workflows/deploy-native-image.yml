@@ -36,7 +36,7 @@ jobs:
         echo "JAVA_HOME: $JAVA_HOME"
         java --version
         native-image --version
-        if: steps.checkout.outcome == 'success'
+      if: steps.checkout.outcome == 'success'
 
     - name: Build Native Image
       id: build
