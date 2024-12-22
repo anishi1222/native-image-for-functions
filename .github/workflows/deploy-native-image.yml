@@ -27,7 +27,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mvn -Pnative package
-          pwd
+          ls -lR
           cd ./target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}
           zip -r -0 ../${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip .
 
