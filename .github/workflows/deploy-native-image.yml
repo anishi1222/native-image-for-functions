@@ -32,15 +32,10 @@ jobs:
       if: steps.checkout.outcome == 'success'
       run: |
         mvn -Pnative package
-
-    - name: packaging
-      id: packaging
-      if: steps.build.outcome == 'success'
-      run: |
         pwd
         cd ./target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}
-        zip -r -0 ../${{ secrets.AZURE_FUNCTIONS_APP_NAME }}-0.1.zip .
-        
+        zip -r -0 ../${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip .
+
     # - name: 'Deploy to Azure Function'
     #   uses: Azure/functions-action@v1
     #   with:
@@ -49,7 +44,7 @@ jobs:
 
     - name: push artifact
       uses: actions/upload-artifact@v4
-      if: steps.packaging.outcome == 'success'
+      if: steps.build.outcome == 'success'
       with:
         name: my-artifact
         path: ./target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip
