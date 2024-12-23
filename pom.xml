@@ -25,7 +25,7 @@
         <exec.mainClass>dev.logicojp.micronaut.Application</exec.mainClass>
         <functionResourceGroup>demofunc-native</functionResourceGroup>
         <functionAppName>logicojp-nativefunc</functionAppName>
-        <functionAppRegion>westus3</functionAppRegion>
+        <functionAppRegion>japaneast</functionAppRegion>
     </properties>
 
     <repositories>
