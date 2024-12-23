@@ -10,8 +10,8 @@
   },
   "customHandler": {
     "description": {
-      "defaultExecutablePath": "app/demofunc",
-      "workingDirectory": "app",
+      "defaultExecutablePath": "demofunc",
+      "workingDirectory": "",
       "arguments": []
     },
     "enableForwardingHttpRequest": true
