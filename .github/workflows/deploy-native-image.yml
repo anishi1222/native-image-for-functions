@@ -37,16 +37,15 @@ jobs:
 
     - name: packaging
       run: |
-        mkdir packing && cd packing
-        cp -R ./src/main/function/. .
-        cp ./target/demofunc .
+        unzip ./target/demofunc-1.0.zip
+        cd ./target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}
         zip -r -0 ../${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip .
 
     - name: push artifact
       uses: actions/upload-artifact@v4
       with:
         name: my-artifact
-        path: ./${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip
+        path: ./target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip
       
   deploy:
     runs-on: ubuntu-latest
