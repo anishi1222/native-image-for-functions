@@ -173,7 +173,7 @@
                                 </resource>
                             </resources>
                             <outputDirectory>
-                                ${project.build.directory}/${functionAppName}
+                                ${project.build.directory}/app
                             </outputDirectory>
                         </configuration>
                     </execution>
@@ -184,7 +184,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.7.1</version>
                 <configuration>
-                    <archiveBaseDirectory>${project.build.directory}/${functionAppName}</archiveBaseDirectory>
+                    <archiveBaseDirectory>${project.build.directory}/app</archiveBaseDirectory>
                     <descriptors>
                         <descriptor>assembly.xml</descriptor>
                     </descriptors>
@@ -196,6 +196,9 @@
                         <goals>
                             <goal>single</goal>
                         </goals>
+                        <configuration>
+                            <finalName>${project.artifactId}</finalName>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

@@ -6,7 +6,7 @@
     <formats>
         <format>zip</format>
     </formats>
-    <baseDirectory>./logicojp-demofunc-app</baseDirectory>
+    <baseDirectory>app</baseDirectory>
     <fileSets>
         <fileSet>
             <directory>.</directory>
