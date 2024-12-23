@@ -12,31 +12,41 @@ permissions:
       id-token: write
       contents: read
 
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - name: checkout codes
+      uses: actions/checkout@v4
 
-    - name: Setup GraalVM
+    - name: checkout codes and setup GraalVM
       uses: graalvm/setup-graalvm@v1
       with:
         java-version: '21'
         distribution: 'graalvm'
         github-token: ${{ secrets.GITHUB_TOKEN }}
-
+        native-image-job-reports: 'true'
+        
     - name: Build
       run: |
-        mvn clean install -Pnative
-        cd ./target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}
+        mvn -B package -Pnative
+
+    - name: packaging
+      run: |
+        mkdir packing && cd packing
+        cp -R ./src/main/function/. .
+        cp ./target/demofunc .
         zip -r -0 ../${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip .
 
     - name: push artifact
       uses: actions/upload-artifact@v4
       with:
         name: my-artifact
-        path: ./target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip
+        path: ./${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip
       
   deploy:
     runs-on: ubuntu-latest
