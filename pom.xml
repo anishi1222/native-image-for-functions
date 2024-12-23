@@ -24,7 +24,7 @@
         <micronaut.runtime>netty</micronaut.runtime>
         <exec.mainClass>dev.logicojp.micronaut.Application</exec.mainClass>
         <functionResourceGroup>demofunc-native</functionResourceGroup>
-        <functionAppName>logicojp-native</functionAppName>
+        <functionAppName>logicojp-nativefunc</functionAppName>
         <functionAppRegion>westus3</functionAppRegion>
     </properties>
 
