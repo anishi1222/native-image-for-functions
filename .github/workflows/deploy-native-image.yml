@@ -36,7 +36,7 @@ jobs:
     - name: packaging
       run: |
         mkdir packing && cd packing
-        cp -R ./src/main/functions/. .
+        cp -R ./src/main/function/. .
         cp ./target/demofunc .
         zip -r -0 ../${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip .
 
