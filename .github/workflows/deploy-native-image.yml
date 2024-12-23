@@ -33,8 +33,9 @@ jobs:
     - name: Build
       run: |
         mvn clean package -Pnative
-        cd ./target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}
-        zip -r -0 ../${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip .
+
+    - name: packaging
+      run: cd ./target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }} && zip -r -0 ../${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip .
 
     - name: push artifact
       uses: actions/upload-artifact@v4
