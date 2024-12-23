@@ -33,7 +33,8 @@ jobs:
         
     - name: Build
       run: |
-        mvn -B package -Pnative
+        mvn -B install
+        ls -la ./target/
 
     - name: packaging
       run: |
