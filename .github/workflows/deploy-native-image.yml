@@ -32,9 +32,8 @@ jobs:
         native-image-job-reports: 'true'
         
     - name: Build
-      timeout-minutes: 5
       run: |
-        mvn clean package -Pnative
+        mvn clean package
 
     - name: packaging
       run: |
