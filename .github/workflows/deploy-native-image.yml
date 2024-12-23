@@ -20,9 +20,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: checkout codes
+      uses: actions/checkout@v4
+
     - name: checkout codes and setup GraalVM
-    - uses: actions/checkout@v4
-    - uses: graalvm/setup-graalvm@v1
+      uses: graalvm/setup-graalvm@v1
       with:
         java-version: '21'
         distribution: 'graalvm'
@@ -30,6 +32,7 @@ jobs:
         native-image-job-reports: 'true'
         
     - name: Build
+      timeout-minutes: 4
       run: |
         mvn clean package -Pnative
 
