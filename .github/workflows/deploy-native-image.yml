@@ -20,16 +20,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Setup GraalVM
-      uses: graalvm/setup-graalvm@v1
+    - name: checkout codes and setup GraalVM
+    - uses: actions/checkout@v4
+    - uses: graalvm/setup-graalvm@v1
       with:
         java-version: '21'
         distribution: 'graalvm'
         github-token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Checkout code
-      uses: actions/checkout@v2
-
+        native-image-job-reports: 'true'
+        
     - name: Build
       run: |
         mvn clean package -Pnative
