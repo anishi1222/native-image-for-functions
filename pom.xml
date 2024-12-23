@@ -236,7 +236,7 @@
                                 <buildArg>-Ob</buildArg>
                                 <!-- <buildArg>&#45;&#45;static</buildArg> -->
                                 <!-- <buildArg>&#45;&#45;libc=musl</buildArg> -->
-<!--                                <buildArg>&#45;&#45;gc=G1</buildArg>-->
+                                <buildArg>--gc=G1</buildArg>
                             </buildArgs>
                         </configuration>
                     </plugin>
