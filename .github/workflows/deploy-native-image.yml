@@ -28,19 +28,15 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Checkout code
-      id: checkout
       uses: actions/checkout@v2
 
     - name: Build
-      id: build
-      if: steps.checkout.status == 'success'
       run: |
         mvn clean package -Pnative
         cd ./target/${{ secrets.AZURE_FUNCTIONS_APP_NAME }}
         zip -r -0 ../${{ secrets.AZURE_FUNCTIONS_APP_NAME }}.zip .
 
     - name: push artifact
-      if: steps.checkout.status == 'success' && steps.build.status == 'success'
       uses: actions/upload-artifact@v4
       with:
         name: my-artifact
