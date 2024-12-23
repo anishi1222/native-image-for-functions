@@ -64,5 +64,5 @@ jobs:
 
       run: |
         ls -R ./
-        unzip demofunc.zip
+        unzip -t app.zip
         
