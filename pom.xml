@@ -49,6 +49,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+            <version>1.5.15</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -151,7 +152,7 @@
                 <executions>
                     <execution>
                         <id>copy-resources</id>
-                        <phase>after:package</phase>
+                        <phase>install</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
@@ -191,7 +192,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>after:package</phase>
+                        <phase>install</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
@@ -233,9 +234,9 @@
                             <buildArgs combine.children="append">
                                 <buildArg>--no-fallback</buildArg>
                                 <buildArg>-Ob</buildArg>
-                                <!-- <buildArg>- -static</buildArg> -->
-                                <!-- <buildArg>- -libc=musl</buildArg> -->
-                                <buildArg>--gc=G1</buildArg>
+                                <!-- <buildArg>&#45;&#45;static</buildArg> -->
+                                <!-- <buildArg>&#45;&#45;libc=musl</buildArg> -->
+<!--                                <buildArg>&#45;&#45;gc=G1</buildArg>-->
                             </buildArgs>
                         </configuration>
                     </plugin>
