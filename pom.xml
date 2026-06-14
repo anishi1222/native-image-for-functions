@@ -18,6 +18,7 @@
         <maven.compiler.plugin.version>3.15.0</maven.compiler.plugin.version>
         <native.maven.plugin.version>1.1.2</native.maven.plugin.version>
         <logback.classic.version>1.5.34</logback.classic.version>
+        <logback.core.version>1.5.34</logback.core.version>
         <packaging>native-image</packaging>
         <jdk.version>25</jdk.version>
         <release.version>25</release.version>
@@ -28,6 +29,8 @@
         <micronaut.runtime>netty</micronaut.runtime>
         <exec.mainClass>dev.logicojp.micronaut.Application</exec.mainClass>
         <azure.functions.maven.plugin.version>1.42.0</azure.functions.maven.plugin.version>
+        <azure.functions.plugin.jackson.version>2.18.6</azure.functions.plugin.jackson.version>
+        <azure.functions.plugin.netty.version>4.1.135.Final</azure.functions.plugin.netty.version>
         <functionAppName>logicojp-nativefunc</functionAppName>
         <resourceGroup>demofunc-native</resourceGroup>
         <appServicePlanName>ASP-logicojp-nativefunc</appServicePlanName>
@@ -61,6 +64,12 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.core.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>io.micronaut</groupId>
             <artifactId>micronaut-http-client</artifactId>
             <scope>test</scope>
@@ -88,6 +97,53 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-functions-maven-plugin</artifactId>
                 <version>${azure.functions.maven.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-core</artifactId>
+                        <version>${azure.functions.plugin.jackson.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-common</artifactId>
+                        <version>${azure.functions.plugin.netty.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-buffer</artifactId>
+                        <version>${azure.functions.plugin.netty.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-transport</artifactId>
+                        <version>${azure.functions.plugin.netty.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-codec</artifactId>
+                        <version>${azure.functions.plugin.netty.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-codec-http</artifactId>
+                        <version>${azure.functions.plugin.netty.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-codec-http2</artifactId>
+                        <version>${azure.functions.plugin.netty.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-handler</artifactId>
+                        <version>${azure.functions.plugin.netty.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-handler-proxy</artifactId>
+                        <version>${azure.functions.plugin.netty.version}</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
                     <resourceGroup>${functionResourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
