@@ -1,4 +1,4 @@
-FROM container-registry.oracle.com/graalvm/native-image:21-muslib-ol9 AS build
+FROM container-registry.oracle.com/graalvm/native-image:25-muslib-ol9 AS build
 WORKDIR /
 # install maven
 RUN microdnf install gzip
