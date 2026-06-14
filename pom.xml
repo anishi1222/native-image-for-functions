@@ -21,7 +21,7 @@
         <packaging>native-image</packaging>
         <jdk.version>25</jdk.version>
         <release.version>25</release.version>
-        <micronaut.version>5.0.2</micronaut.version>
+        <micronaut.version>5.0.3</micronaut.version>
         <micronaut.aot.runtime>native</micronaut.aot.runtime>
         <micronaut.aot.enabled>false</micronaut.aot.enabled>
         <micronaut.aot.packageName>dev.logicojp.micronaut.aot.generated</micronaut.aot.packageName>
