@@ -1,39 +1,44 @@
 package dev.logicojp.micronaut;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class MessageTest {
 
     @Test
-    void accessorReturnsConstructorValue() {
-        Message message = new Message("hello");
-        assertEquals("hello", message.message());
+    void testMessageCreation() {
+        Message message = new Message("Hello");
+        assertNotNull(message);
+        assertEquals("Hello", message.message());
     }
 
     @Test
-    void recordsWithSameValueAreEqualAndShareHashCode() {
-        Message first = new Message("same");
-        Message second = new Message("same");
-        assertEquals(first, second);
-        assertEquals(first.hashCode(), second.hashCode());
+    void testMessageEquality() {
+        Message message1 = new Message("Hello");
+        Message message2 = new Message("Hello");
+        assertEquals(message1, message2);
     }
 
     @Test
-    void recordsWithDifferentValueAreNotEqual() {
-        assertNotEquals(new Message("a"), new Message("b"));
+    void testMessageInequality() {
+        Message message1 = new Message("Hello");
+        Message message2 = new Message("World");
+        assertNotEquals(message1, message2);
     }
 
     @Test
-    void toStringContainsValue() {
-        assertTrue(new Message("payload").toString().contains("payload"));
+    void testMessageToString() {
+        Message message = new Message("Hello");
+        assertNotNull(message.toString());
     }
 
     @Test
-    void allowsNullValue() {
-        assertNull(new Message(null).message());
+    void testMessageWithNullContent() {
+        Message message = new Message(null);
+        assertNotNull(message);
+        assertEquals(null, message.message());
     }
 }

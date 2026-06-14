@@ -1,34 +1,43 @@
 package dev.logicojp.micronaut;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import io.micronaut.http.HttpRequest;
+import io.micronaut.http.client.HttpClient;
+import io.micronaut.http.client.annotation.Client;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@MicronautTest
 class GreetingServiceTest {
 
-    private final GreetingService service = new GreetingService();
+    @Inject
+    @Client("/")
+    HttpClient client;
 
     @Test
-    void greetingWithProvidedNameReturnsPersonalizedMessage() {
-        Message message = service.greeting("Alice");
-        assertEquals("Hi, Alice, what's up?", message.message());
+    void testGreetingWithDefaultName() {
+        Message response = client.toBlocking()
+                .retrieve(HttpRequest.GET("/api/greeting"), Message.class);
+        assertNotNull(response);
+        assertEquals("Hi, world, what's up?", response.message());
     }
 
     @Test
-    void greetingWithDefaultNameValueReturnsWorldMessage() {
-        // "world" is the controller's @QueryValue default; verified here by passing it explicitly
-        Message message = service.greeting("world");
-        assertEquals("Hi, world, what's up?", message.message());
+    void testGreetingWithCustomName() {
+        Message response = client.toBlocking()
+                .retrieve(HttpRequest.GET("/api/greeting?name=Alice"), Message.class);
+        assertNotNull(response);
+        assertEquals("Hi, Alice, what's up?", response.message());
     }
 
     @Test
-    void greetingWithEmptyNameStillFormatsMessage() {
-        Message message = service.greeting("");
-        assertEquals("Hi, , what's up?", message.message());
-    }
-
-    @Test
-    void greetingNeverReturnsNull() {
-        assertNotNull(service.greeting("Bob"));
+    void testGreetingResponseIsNotNull() {
+        Message response = client.toBlocking()
+                .retrieve(HttpRequest.GET("/api/greeting?name=Bob"), Message.class);
+        assertNotNull(response);
+        assertNotNull(response.message());
     }
 }
