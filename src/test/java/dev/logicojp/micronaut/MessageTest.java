@@ -1,10 +1,10 @@
 package dev.logicojp.micronaut;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import org.junit.jupiter.api.Test;
 
 class MessageTest {
 
@@ -20,6 +20,7 @@ class MessageTest {
         Message message1 = new Message("Hello");
         Message message2 = new Message("Hello");
         assertEquals(message1, message2);
+        assertEquals(message1.hashCode(), message2.hashCode());
     }
 
     @Test
@@ -32,13 +33,13 @@ class MessageTest {
     @Test
     void testMessageToString() {
         Message message = new Message("Hello");
-        assertNotNull(message.toString());
+        assertEquals("Message[message=Hello]", message.toString());
     }
 
     @Test
     void testMessageWithNullContent() {
         Message message = new Message(null);
         assertNotNull(message);
-        assertEquals(null, message.message());
+        assertNull(message.message());
     }
 }
