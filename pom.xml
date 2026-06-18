@@ -313,9 +313,9 @@
                             <buildArgs combine.children="append">
                                 <buildArg>--no-fallback</buildArg>
                                 <buildArg>-Ob</buildArg>
-                                <!-- <buildArg>&#45;&#45;static</buildArg> -->
-                                <!-- <buildArg>&#45;&#45;libc=musl</buildArg> -->
-                                <!-- <buildArg> gc=G1</buildArg> -->
+                                <buildArg>&#45;&#45;static</buildArg>
+                                <buildArg>&#45;&#45;libc=musl</buildArg>
+                                <buildArg> gc=G1</buildArg>
                             </buildArgs>
                         </configuration>
                     </plugin>
