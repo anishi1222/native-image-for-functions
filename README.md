@@ -336,9 +336,10 @@ The [Dockerfile](Dockerfile) keeps both deployment flows:
 
 ### GitHub Actions
 
-[.github/workflows/deploy-container-apps.yml](.github/workflows/deploy-container-apps.yml) runs JVM tests, builds
-the `functions-runtime` image for `linux/amd64`, pushes it to Azure Container Registry, creates the Function App
-in the Container Apps environment when needed, and updates the app to the pushed image.
+[.github/workflows/deploy-container-apps.yml](.github/workflows/deploy-container-apps.yml) runs JVM tests and validates the
+`functions-runtime` image build for `linux/amd64` on every push to `main`. A manual dispatch performs the Azure-authenticated
+steps: pushing the image to Azure Container Registry, creating the Function App in the Container Apps environment when needed,
+and updating the app to the pushed image.
 
 Configure these repository secrets:
 
