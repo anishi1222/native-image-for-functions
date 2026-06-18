@@ -14,3 +14,10 @@ out/
 .classpath
 .factorypath
 docs/
+.vscode/
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.swn
