@@ -1,0 +1,11 @@
+.git
+.github
+.idea
+.micronaut
+.vscode
+build
+docs
+out
+target
+*.log
+*.tmp

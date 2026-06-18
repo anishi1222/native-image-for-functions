@@ -1,0 +1,122 @@
+name: Build Native Image container and deploy to Azure Functions on Container Apps
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: container-apps-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    outputs:
+      image-uri: ${{ steps.image.outputs.image-uri }}
+    steps:
+    - name: Checkout codes
+      uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+    - name: Setup GraalVM
+      uses: graalvm/setup-graalvm@329c42c5f4c343bceb505f0b28cc8499bc2bf174 # v1.5.4
+      with:
+        java-version: '25'
+        distribution: 'graalvm'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Run JVM tests
+      run: mvn -B -Dpackaging=jar test
+
+    - name: Login to Azure
+      uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3.0.0
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Build and push Functions container image
+      id: image
+      env:
+        REGISTRY_NAME: ${{ vars.AZURE_CONTAINER_REGISTRY }}
+        IMAGE_NAME: ${{ vars.AZURE_CONTAINER_IMAGE_NAME }}
+      run: |
+        login_server=$(az acr show --name "$REGISTRY_NAME" --query loginServer -o tsv)
+        image_uri="${login_server}/${IMAGE_NAME}:${IMAGE_TAG}"
+        az acr login --name "$REGISTRY_NAME"
+        docker build --platform linux/amd64 --target functions-runtime -t "$image_uri" .
+        docker push "$image_uri"
+        echo "image-uri=$image_uri" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Login to Azure
+      uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3.0.0
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Create or update Azure Functions on Container Apps
+      env:
+        RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+        FUNCTION_APP_NAME: ${{ vars.AZURE_CONTAINERAPPS_FUNCTION_APP_NAME }}
+        CONTAINERAPPS_ENVIRONMENT: ${{ vars.AZURE_CONTAINERAPPS_ENVIRONMENT }}
+        STORAGE_ACCOUNT: ${{ vars.AZURE_STORAGE_ACCOUNT }}
+        USER_ASSIGNED_IDENTITY_RESOURCE_ID: ${{ vars.AZURE_FUNCTIONS_MANAGED_IDENTITY_RESOURCE_ID }}
+        USER_ASSIGNED_IDENTITY_CLIENT_ID: ${{ vars.AZURE_FUNCTIONS_MANAGED_IDENTITY_CLIENT_ID }}
+        REGISTRY_NAME: ${{ vars.AZURE_CONTAINER_REGISTRY }}
+        IMAGE_URI: ${{ needs.build.outputs.image-uri }}
+      run: |
+        app_exists=$(az functionapp show \
+          --name "$FUNCTION_APP_NAME" \
+          --resource-group "$RESOURCE_GROUP" \
+          --query name -o tsv 2>/dev/null || true)
+
+        if [ -z "$app_exists" ]; then
+          az functionapp create \
+            --name "$FUNCTION_APP_NAME" \
+            --resource-group "$RESOURCE_GROUP" \
+            --storage-account "$STORAGE_ACCOUNT" \
+            --environment "$CONTAINERAPPS_ENVIRONMENT" \
+            --workload-profile-name "Consumption" \
+            --functions-version 4 \
+            --assign-identity "$USER_ASSIGNED_IDENTITY_RESOURCE_ID"
+        fi
+
+        az functionapp identity assign \
+          --name "$FUNCTION_APP_NAME" \
+          --resource-group "$RESOURCE_GROUP" \
+          --identities "$USER_ASSIGNED_IDENTITY_RESOURCE_ID"
+
+        az resource patch \
+          --resource-group "$RESOURCE_GROUP" \
+          --name "$FUNCTION_APP_NAME" \
+          --resource-type "Microsoft.Web/sites" \
+          --properties "{\"siteConfig\":{\"linuxFxVersion\":\"DOCKER|${IMAGE_URI}\",\"acrUseManagedIdentityCreds\":true,\"acrUserManagedIdentityID\":\"${USER_ASSIGNED_IDENTITY_RESOURCE_ID}\"}}"
+
+        az functionapp config appsettings delete \
+          --name "$FUNCTION_APP_NAME" \
+          --resource-group "$RESOURCE_GROUP" \
+          --setting-names AzureWebJobsStorage || true
+
+        az functionapp config appsettings set \
+          --name "$FUNCTION_APP_NAME" \
+          --resource-group "$RESOURCE_GROUP" \
+          --settings \
+            FUNCTIONS_WORKER_RUNTIME=Custom \
+            FUNCTIONS_EXTENSION_VERSION=~4 \
+            DOCKER_REGISTRY_SERVER_URL="https://${REGISTRY_NAME}.azurecr.io" \
+            AzureWebJobsStorage__accountName="$STORAGE_ACCOUNT" \
+            AzureWebJobsStorage__credential=managedidentity \
+            AzureWebJobsStorage__clientId="$USER_ASSIGNED_IDENTITY_CLIENT_ID"

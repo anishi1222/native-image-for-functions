@@ -9,8 +9,8 @@ on:
   workflow_dispatch:
 
 permissions:
-      id-token: write
-      contents: read
+  id-token: write
+  contents: read
 
 concurrency:
   group: ${{ github.ref }}
@@ -30,11 +30,14 @@ jobs:
         distribution: 'graalvm'
         github-token: ${{ secrets.GITHUB_TOKEN }}
         
-    - name: Build and packaging
+    - name: Run JVM tests
+      run: mvn -B -Dpackaging=jar test
+
+    - name: Build linux/amd64 native package
       run: |
-        mvn -B install
+        docker build --platform linux/amd64 --target artifact --output type=local,dest=./target .
         ls -la ./target/
-        ./compress.sh
+        unzip -t ./target/app.zip
 
     - name: push artifact
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -66,9 +69,15 @@ jobs:
         ls -R ./
         unzip -t app.zip
 
+    - name: Configure Azure Functions app settings
+      run: |
+        az functionapp config appsettings set \
+          --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
+          --name "${{ secrets.AZURE_FUNCTIONS_APP_NAME }}" \
+          --settings FUNCTIONS_WORKER_RUNTIME=Custom FUNCTIONS_EXTENSION_VERSION=~4
+
     - name: Deploy to Azure Functions
       uses: azure/functions-action@bc63708cc6539760eea18d8a7de4ce8ef5fdf593 # v1
       with:
         app-name: ${{ secrets.AZURE_FUNCTIONS_APP_NAME }}
         package: './app.zip'
-

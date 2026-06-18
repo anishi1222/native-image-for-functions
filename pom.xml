@@ -144,9 +144,9 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <resourceGroup>${functionResourceGroup}</resourceGroup>
+                    <resourceGroup>${resourceGroup}</resourceGroup>
                     <appName>${functionAppName}</appName>
-                    <region>${functionAppRegion}</region>
+                    <region>${region}</region>
                     <runtime>
                         <os>${runtime.os}</os>
                     </runtime>
@@ -157,11 +157,7 @@
                         </property>
                         <property>
                             <name>FUNCTIONS_WORKER_RUNTIME</name>
-                            <value>custom</value>
-                        </property>
-                        <property>
-                            <name>WEBSITE_RUN_FROM_PACKAGE</name>
-                            <value>1</value>
+                            <value>Custom</value>
                         </property>
                     </appSettings>
                     <disableAppInsights>false</disableAppInsights>
@@ -228,7 +224,7 @@
                 <executions>
                     <execution>
                         <id>copy-resources</id>
-                        <phase>install</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
@@ -268,7 +264,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>install</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
@@ -315,7 +311,7 @@
                                 <buildArg>-Ob</buildArg>
                                 <buildArg>&#45;&#45;static</buildArg>
                                 <buildArg>&#45;&#45;libc=musl</buildArg>
-                                <buildArg> gc=G1</buildArg>
+                                <buildArg>--gc=G1</buildArg>
                             </buildArgs>
                         </configuration>
                     </plugin>
