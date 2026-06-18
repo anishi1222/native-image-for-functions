@@ -6,7 +6,9 @@ ARG MAVEN_SHA512=831a8591fe20c8243b1dbe7d71e3244f31d1665b0804b2e825e38cbbe5ce0ca
 RUN microdnf install -y ca-certificates gzip && microdnf clean all
 
 ADD https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz apache-maven.tar.gz
-RUN tar -xzf apache-maven.tar.gz -C /
+RUN echo "${MAVEN_SHA512}  apache-maven.tar.gz" | sha512sum -c - \
+	&& tar -xzf apache-maven.tar.gz -C / \
+	&& rm -f apache-maven.tar.gz
 
 WORKDIR /app
 COPY pom.xml .
