@@ -28,7 +28,7 @@
         <micronaut.runtime>netty</micronaut.runtime>
         <exec.mainClass>dev.logicojp.micronaut.Application</exec.mainClass>
         <azure.functions.maven.plugin.version>1.42.0</azure.functions.maven.plugin.version>
-        <azure.functions.plugin.jackson.version>2.22.0</azure.functions.plugin.jackson.version>
+        <azure.functions.plugin.jackson.version>2.22.1</azure.functions.plugin.jackson.version>
         <azure.functions.plugin.netty.version>4.2.16.Final</azure.functions.plugin.netty.version>
         <functionAppName>logicojp-nativefunc</functionAppName>
         <resourceGroup>demofunc-native</resourceGroup>
