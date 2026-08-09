@@ -24,7 +24,7 @@ jobs:
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: checkout codes and setup GraalVM
-      uses: graalvm/setup-graalvm@v1.6.3
+      uses: graalvm/setup-graalvm@v1.6.4
       with:
         version: '25.1'
         distribution: 'graalvm'
