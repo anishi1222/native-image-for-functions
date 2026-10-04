@@ -18,7 +18,7 @@
         <maven.compiler.plugin.version>3.15.0</maven.compiler.plugin.version>
         <native.maven.plugin.version>1.1.14</native.maven.plugin.version>
         <logback.classic.version>1.6.3</logback.classic.version>
-        <logback.core.version>1.6.3</logback.core.version>
+        <logback.core.version>1.6.5</logback.core.version>
         <jdk.version>25</jdk.version>
         <release.version>25</release.version>
         <micronaut.version>5.2.5</micronaut.version>
