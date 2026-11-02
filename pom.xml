@@ -10,7 +10,7 @@
     <parent>
         <groupId>io.micronaut.platform</groupId>
         <artifactId>micronaut-parent</artifactId>
-        <version>5.2.3</version>
+        <version>5.2.4</version>
     </parent>
     <properties>
         <maven.resources.plugin.version>3.5.0</maven.resources.plugin.version>
@@ -18,10 +18,10 @@
         <maven.compiler.plugin.version>3.15.0</maven.compiler.plugin.version>
         <native.maven.plugin.version>1.1.16</native.maven.plugin.version>
         <logback.classic.version>1.6.6</logback.classic.version>
-        <logback.core.version>1.6.5</logback.core.version>
+        <logback.core.version>1.6.6</logback.core.version>
         <jdk.version>25</jdk.version>
         <release.version>25</release.version>
-        <micronaut.version>5.2.18</micronaut.version>
+        <micronaut.version>5.2.21</micronaut.version>
         <micronaut.aot.runtime>native</micronaut.aot.runtime>
         <micronaut.aot.enabled>false</micronaut.aot.enabled>
         <micronaut.aot.packageName>dev.logicojp.micronaut.aot.generated</micronaut.aot.packageName>
